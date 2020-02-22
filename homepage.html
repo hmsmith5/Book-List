@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Book Library</title>
+<meta charset = "UTF-8" />
+<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body>
+    <h1>Books to Read</h1>
+    <div id="content"></div>
+<br><br> 
+    <div class="form-popup" id="popup-Form">
+            <form id="addbook" class="form-container" onsubmit="return false">
+              <h2>Add New Book:</h2>
+              <label for="title"> <strong>Title: </strong></label>
+              <input type="text" placeholder="Book Title" name="title" id="title" required>
+              
+              <label for="Author"><strong>Author</strong></label>
+              <input type="text" placeholder="Author" name="author" id="author" required>
+              
+              <label for="Pages"><strong>Pages</strong> </label>
+              <input type="number" placeholder="500" name="pages" id="pages">
+
+              <p><button type="submit" class="btn">Add Book</button>
+              <button type="submit" class="btn cancel" onclick="closeForm()">Cancel</button></p>
+            </form>
+    </div>
+
+
+    <script src="scripts.js"></script>
+</body>
+</html>
