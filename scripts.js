@@ -1,7 +1,7 @@
 const NUM_PROPERTIES = 4; //Number of book properties i.e. title,author,...
 
-//Array of Books
 let myLibrary = [];
+let libraryIndex = 0;
 
 //Book object
 function Book(title, author, pages){
@@ -9,6 +9,8 @@ function Book(title, author, pages){
     this.author = author;
     this.pages = pages;
     this.read = true;
+    this.bookIndex = libraryIndex;
+    libraryIndex++;
     this.info = function(){
         return title + " by " + author; 
     }
@@ -28,6 +30,7 @@ function addBooktoLibrary(book){
     myLibrary.push(book);
 }
 
+//Table showing books
 let table = document.createElement("table");
 let header = document.createElement("thead");
 let tbody = document.createElement("tbody"); 
@@ -45,12 +48,11 @@ let headRow = document.createElement("tr");
 //Generate table with list of books
 function render() {
 
-    let index = 0;
     myLibrary.forEach(function(el){
         let tr = document.createElement("tr");
         let counter = 0;
         for (let i in el) {
-            if (counter >=  4){
+            if (counter >=  3){
                 continue;
             }
             let td = document.createElement("td");
@@ -58,16 +60,38 @@ function render() {
             tr.appendChild(td);
             counter++;
         }
+        //Read status
         let td = document.createElement("td");
+        readOption = document.createElement("select");
+        let op = document.createElement("option");
+        op.value = 1;
+        op.text = "Read";
+        readOption.options.add(op); 
+        
+        let op2 = document.createElement("option");
+        op2.value = 0;
+        op2.text = "Not Read";
+        readOption.options.add(op2);
+        td.appendChild(readOption);
+        tr.appendChild(td);
+
+        readOption.addEventListener("change", function(){
+            let row = readOption.parentElement.parentElement;
+            changeStatus(this.value, row);
+        });
+
+        //Delete button
+        let td2 = document.createElement("td");
         let deletebut = document.createElement("button");
         deletebut.innerHTML = "delete";
+
+        td2.appendChild(deletebut);
+        tr.appendChild(td2);
         deletebut.addEventListener("click", function(){
-            deleteBook(index);
+            deleteBook(deletebut.parentElement.parentElement);
         })
-        td.appendChild(deletebut);
-        tr.appendChild(td);
         tbody.appendChild(tr);
-        index++;
+    
     })
 
     table.appendChild(tbody);
@@ -76,10 +100,12 @@ function render() {
    document.getElementById("content").appendChild(table);
     
 }
+
+//Initial table
 render();
 
 
-
+//form to add new book
 document.getElementById("addbook").addEventListener("submit", addNewBook);
 
 function addNewBook() {
@@ -91,8 +117,30 @@ function addNewBook() {
     render();
 }
 
-function deleteBook(booknum){
-   table.deleteRow(booknum);
+//Function to delete book with given index
+function deleteBook(Rownum){
+    const bookTitle = Rownum.children[0].innerHTML; 
+    table.deleteRow(Rownum.rowIndex);               
+    for (i = 0; i < myLibrary.length; i++) {             
+        if (myLibrary[i].title == bookTitle) {           
+            myLibrary.splice(i, 1); 
+        }
+    }
+}
+
+/*
+Function to change read status
+params: select option and row
+*/
+function changeStatus(option, row){
+    const bookTitle = row.children[0].innerHTML; 
+    for (i = 0; i < myLibrary.length; i++) {             
+        if (myLibrary[i].title == bookTitle) {           
+             bookToChange = myLibrary[i];
+        }
+    }
+    bookToChange.read = (option == true) ? true : false;
+    console.log(bookToChange.read);
 }
 
 
